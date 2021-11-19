@@ -127,3 +127,52 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#ignore db files
+*.db
+
+#ignore vs code dir
+.vscode/
+
+#ignore all .out files
+*.out
+
+#ignore pycache folder
+__pycache__
+
+#ignore the virtual envirorment
+.venv/
+migrations/
+
+# ignore Mac OSX file
+*.DS_Store
+
+#ignore the edl text files
+/static/edl_plain/
+
+#ignore the ipad stuff
+/static/ipad_jamf_files/
+
+#ignore mainly due to some passwords used
+/scripts/xml_to_csv.py
+
+#ignore all .pyc 
+*.pyc
+
+#ignore all lookup files
+/static/lookup_files/
+
+#dont include the username and passwords for the svc accounts
+svc_config.py
+
+dmca_export_tbl.sql
+dmca_export_recent.sql
+
+# exclude to keep local instance the same
+run.py
+
+#ignore ldap roles files
+/static/ldap_roles/
+
+#ignore the sonarscanner stuff
+.scannerwork/

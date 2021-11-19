@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>UK Cybersecurity</title>
+    {% endif %}
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.1/css/rowGroup.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/searchpanes/1.0.1/css/searchPanes.bootstrap4.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.bootstrap4.min.css"/>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.1/js/dataTables.rowGroup.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/searchpanes/1.0.1/js/dataTables.searchPanes.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    
+</head>
+
+<body style="height: 100%;">
+
+<header class="site-header">
+    <link rel="shortcut icon" href='/static/favicon.ico' type='image/x-icon' /> 
+    <nav class="navbar navbar-expand-md navbar-dark bg-blue fixed-top fixed-top">
+        <div class="navbar-brand-icon">
+            <img src={{ url_for("static", filename="UK-Logo-white.png") }}>
+        </div>
+        <a class="navbar-brand mr-4" href="/">UK Cybersecurity</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+                {% if (current_user.is_authenticated) and (current_user.role != "USER") %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Lookup
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('vpn_check') }}">VPN Check</a>
+                            <a class="dropdown-item" href="{{ url_for('lookup_main') }}">IP/URL Lookup</a>
+                            <a class="dropdown-item" href="{{ url_for('public_ips') }}">Public IP Lookup</a>
+                            {% if (current_user.role != "USER") and (current_user.role != "HELPDESK") %}
+                                <a class="dropdown-item" href="{{ url_for('lookup_pages') }}">Lookup Pages</a>
+                                <a class="dropdown-item" href="{{ url_for('manage_files') }}">Lookup Manager</a>
+                                
+                            {% endif %}
+                        </div>
+                    </li>
+
+                    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Block
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if ("ADMIN" in current_user.role) or ("SUPERUSER" in current_user.role) or ("HELPDESK" in current_user.role) or ("INTERN" in current_user.role) %}
+                                    {% if ("ADMIN" in current_user.role) or ("SUPERUSER" in current_user.role) %}
+                                        <a class="dropdown-item" href="{{ url_for('dmca_parse') }}">Parse DMCA</a>
+                                        <a class="dropdown-item" href="{{ url_for('block_page_add') }}">DMCA | Add</a>
+                                        <a class="dropdown-item" href="{{ url_for('block_page_remove') }}">DMCA | Remove</a>
+                                    {% endif %}
+                                    <a class="dropdown-item" href="{{ url_for('edl_sub') }}">EDL</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="{{ url_for('comp_accts') }}">Compromised Accounts</a>
+                            </div>
+                        </li>
+
+                        {% if ("HELPDESK" not in current_user.role) %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tools
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url_for("pastebin_page") }}">Pastebin</a>
+                                    {% if ("SUPERUSER" in current_user.role) or ("ADMIN" in current_user.role) %}
+                                        <a class="dropdown-item" href="{{ url_for("link_sub") }}">Links</a>
+                                        <a class="dropdown-item" href="{{ url_for("downloads") }}">Downloads</a>
+                                        <a class="dropdown-item" href="{{ url_for('api_users') }}">Add API User</a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% if ("ADMIN" in current_user.role) or ("SUPERUSER" in current_user.role) %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                VIP
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for("food") }}">Food</a>
+                                <a class="dropdown-item" href="{{ url_for("quote_sub") }}">Quotes</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if (current_user.role != "USER") and (current_user.role != "HELPDESK") %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for("help_user") }}">Help</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+
+            <ul class="navbar-nav justify-content-end">
+                {% if current_user.is_authenticated %}
+                    {% if "SUPERUSER" in current_user.role %}
+                        <a class="nav-link" href="{{ url_for('update_page') }}">Update</a>
+                    {% endif %}
+                    {% if ("ADMIN" in current_user.role) or ("SUPERUSER" in current_user.role) or ("INTERN" in current_user.role) %}
+                        <a class="nav-link" href="{{ url_for('timesheet_main') }}">Timesheet</a>
+                    {% endif %}
+
+                    <a class="nav-link" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    
+{% block content %}{% endblock %}
+
+</main>
+<br><br><br><br>
+
+{% if current_user.is_authenticated %}
+    <footer data-toggle="collapse" href="#collapseQuotes">
+        {% if ("ADMIN" in current_user.role) or ("SUPERUSER" in current_user.role) or ("INTERN" in current_user.role)  %}
+            <div id="collapseQuotes" class="panel-collapse collapse">
+                <div id="quotes-slide" class="carousel slide" data-ride="carousel" data-interval="8000">
+                    <!-- Have 5 random quotes on page load  -->
+                    <ul id="quote-cont" class="carousel-indicators">
+                        <li data-target="#quote-slide" data-slide-to="0" class="active"></li>
+                        <li data-target="#quote-slide" data-slide-to="1" ></li>
+                        <li data-target="#quote-slide" data-slide-to="2" ></li>
+                        <li data-target="#quote-slide" data-slide-to="3" ></li>
+                        <li data-target="#quote-slide" data-slide-to="4" ></li>
+                    </ul>
+
+                    <div id="quotes-list" class="carousel-inner" role="listbox">
+                    </div>
+                </div>
+                <script>
+                    //Using the Fisher-Yates Shuffle algorithm to un-biasly randomize the array
+                    function truffle_shuffle(quotes){
+                        var currIndex = quotes.length, tempVal, randomIndex;
+
+                        //while there are still elements to shuffle
+                        while (currIndex !== 0){
+                            //select a random element and decrease the current index counter
+                            randomIndex = Math.floor(Math.random() * currIndex);
+                            currIndex -= 1;
+
+                            //swap selected element with current element
+                            tempVal = quotes[currIndex];
+                            quotes[currIndex] = quotes[randomIndex];
+                            quotes[randomIndex] = tempVal;
+                        }
+                        return quotes;
+                    }
+
+                    //its a miracle this even works
+                    function loadQuotes(){
+                        $(document).ready(function(){
+                            //get a json result from the link provided
+                            $.getJSON("/quote_data",
+                                function(data){
+                                    $.each(data, function(i, field){    //<--this .each statement doesnt really do anything
+                                        //call function to randomize array
+                                        field = truffle_shuffle(field);
+
+                                        var j, length = 0;
+                                        //iterate through the results and assign to local variables
+                                        //limit to 5 quotes being submitted
+
+                                        if(field.length < 5 ){
+                                            length = field.length;
+                                        }
+                                        else{
+                                            length = 5;
+                                        }
+
+                                        for(j = 0; j < length; j++){
+                                            var quote =field[j].quote;
+
+                                            //prep the var using the locals defined above
+                                            var linkPrep;
+                                            if (j == 0){
+                                                linkPrep = "<div class='carousel-item active text-center p-1'> <p>"+quote+"</p></div>"
+                                            }
+                                            else{
+                                                linkPrep = "<div class='carousel-item text-center p-1'> <p>"+quote+"</p></div>"
+                                            }
+                                            //append it to the div with the id = links
+                                            $('#quotes-list').append(linkPrep);
+                                        }
+                                    });
+                                }
+                            );
+                        });
+                    }
+                    //call the above function when the page loads
+                    $(window).on("load", loadQuotes);
+                </script>
+            </div>
+        {% endif %}
+
+        <small>
+            Logged in as: {{ current_user.username }}
+        </small>
+    </footer>
+{% endif %}
+</body>
+</html>

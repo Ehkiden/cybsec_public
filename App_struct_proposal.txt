@@ -1,0 +1,30 @@
+Stucture of the app will be a sort of hybrid stucture using functional and divisional. 
+
+cybsec_site/    # encompasses the entire app 
+    cybsec_core/    # contains the "meat" of the app such as python and bash files
+        __init__.py
+        sections/   # contains the functional files separated by divisional folders
+            api/
+            automation/ 
+            dmca/
+            edl/
+            ip_lookup/
+            shared_function/
+            pastebin/
+            public_ip/
+            timesheet/
+        forms.py
+        models.py
+        routes.py   # will contain the web pages for the site and points to the files to be executed
+    migrations/ # created upon initializing the sql database for the first time
+    static/
+        js_stuff/
+        ldap_roles/
+        main.css
+    templates/
+        (create folders if needed)
+        base.html
+    run.py
+    site.db
+    svc_config.py
+    
